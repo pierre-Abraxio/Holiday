@@ -119,7 +119,7 @@ namespace PublicHoliday
         /// </summary>
         /// <param name="hijriCalendar"></param>
         /// <param name="hijriYear"></param>
-        private static DateTime IslamicNewYear(HijriCalendar hijriCalendar, int hijriYear)
+        private static DateTime IslamicNewYear(Calendar hijriCalendar, int hijriYear)
         {
             return hijriCalendar.ToDateTime(hijriYear, 1, 1, 0, 0, 0, 0);
         }
@@ -129,7 +129,7 @@ namespace PublicHoliday
         /// </summary>
         /// <param name="hijriCalendar"></param>
         /// <param name="hijriYear"></param>
-        private static DateTime ProphetBirthday(HijriCalendar hijriCalendar, int hijriYear)
+        private static DateTime ProphetBirthday(Calendar hijriCalendar, int hijriYear)
         {
             return hijriCalendar.ToDateTime(hijriYear, 3, 12, 0, 0, 0, 0);
         }
@@ -139,9 +139,19 @@ namespace PublicHoliday
         /// </summary>
         /// <param name="hijriCalendar"></param>
         /// <param name="hijriYear"></param>
-        private static DateTime EidAlFitr(HijriCalendar hijriCalendar, int hijriYear)
+        private static DateTime EidAlFitr(Calendar hijriCalendar, int hijriYear)
         {
-            return hijriCalendar.ToDateTime(hijriYear, 10, 1, 0, 0, 0, 0);
+            
+            var gregorianDate = hijriCalendar.ToDateTime(hijriYear, 10, 1, 0, 0, 0, 0);
+
+            switch (hijriYear)
+            {
+                case 1446:
+                    return gregorianDate.AddDays(-1);
+                default:
+                    return gregorianDate;
+            }
+
         }
 
         /// <summary>
@@ -149,7 +159,7 @@ namespace PublicHoliday
         /// </summary>
         /// <param name="hijriCalendar"></param>
         /// <param name="hijriYear"></param>
-        private static DateTime EidAlAdha(HijriCalendar hijriCalendar, int hijriYear)
+        private static DateTime EidAlAdha(Calendar hijriCalendar, int hijriYear)
         {
             return hijriCalendar.ToDateTime(hijriYear, 12, 10, 0, 0, 0, 0);
         }
@@ -213,7 +223,7 @@ namespace PublicHoliday
                 }
             };
 
-            var hijriCalendar = new HijriCalendar();
+            var hijriCalendar = new HijriCalendar() { HijriAdjustment = -1 };
 
             var gregorianYearStart = new DateTime(year, 1, 1);
             var gregorianYearEnd = new DateTime(year, 12, 31);
@@ -234,6 +244,10 @@ namespace PublicHoliday
         {
             if (date.Year == gregorianYear)
             {
+                if (holidays.ContainsKey(date))
+                {
+                    date = date.AddSeconds(1);
+                }
                 holidays.Add(date, name);
             }
         }

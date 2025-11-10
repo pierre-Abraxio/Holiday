@@ -45,6 +45,8 @@
         Lt,
         /// <summary>Luxembourg</summary> 
         Lu,
+        /// <summary>Morocco</summary> 
+        Ma,
         /// <summary>Mexico</summary> 
         Mx,
         /// <summary>New Zealand</summary> 
